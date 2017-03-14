@@ -1,4 +1,4 @@
-# RScript cpb-plot.r --type "line" --style "cpb-plot-styles.r" --csv "data/C17_211_fig_wrldhndel.txt" --output "output/fig.pdf" --y1lab "index 2010 = 100" --xlab "test x" --y2lab "testy2"; open output/fig.pdf
+# RScript cpb-plot.r --type "line" --style "cpb-plot-styles.r" --csv "data/C17_233_bedr_inves_ex_wo.txt" --output "output/fig.pdf" --future 2010 --y1lab "index 2010 = 100" --xlab "test x" --y2lab "testy2"; open output/fig.pdf
 .DEBUG = interactive(); if (.DEBUG) rm(list = ls())
 
 #
@@ -49,9 +49,12 @@ par(mai = pdf_mai)
 
 # Set bg
 plot(0, 0, axes = F, xlim = x.range, ylim = y.range, xlab = "", ylab = "", t = "n", bg = "red")
-if (is.null(arg$future))
+if (.DEBUG)
 {
-	rect(2015, y.range[1], x.range[2], y.range[2], density = 20, col = "skyblue", border = NA)
+	rect(2015, y.range[1], x.range[2], y.range[2], density = 20, col = future_col, border = NA)
+} else if (!is.null(arg$future))
+{
+	rect(arg$future, y.range[1], x.range[2], y.range[2], density = 20, col = future_col, border = NA)
 }
 
 abline(h = 0, lty = 2, col = line_zero_col, lwd = line_zero_lwd)
