@@ -5,7 +5,7 @@ PLOT.TYPE.LINE     = "line" # for line plot
 PLOT.TYPE.BARH     = "barh" # for horizontal bar plot
 PLOT.TYPE.BARV     = "barv" # for vertical bar plot
 PLOT.TYPE.BARVLINE = "barvline" # for vertical bar plot with line
-PLOT.TYPES         = c(PLOT.TYPE.LINE, PLOT.TYPE.BARH) # add implemented types here
+PLOT.TYPES         = c(PLOT.TYPE.LINE, PLOT.TYPE.BARV) # add implemented types here
 
 
 #
