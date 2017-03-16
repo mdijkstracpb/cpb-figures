@@ -3,7 +3,12 @@ clean_csv = function(csvdata)
 	n_na = apply(csvdata, 2, function(vec) length(which(is.na(vec))))
 	index_emtpy_columns = which(nrow(csvdata) == n_na)
 	
-	csvdata[, -index_emtpy_columns]
+	if (0 < length(index_emtpy_columns))
+	{
+		return(csvdata[, -index_emtpy_columns])
+	} else {
+		return(csvdata)
+	}
 }
 
 fill_x = function(x)

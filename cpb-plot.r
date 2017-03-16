@@ -1,4 +1,3 @@
-# RScript cpb-plot.r --type "line" --style "cpb-plot-styles.r" --csv "data/C17_233_bedr_inves_ex_wo.txt" --output "output/fig.pdf" --future 2010 --y1lab "index 2010 = 100" --xlab "test x" --y2lab "testy2"; open output/fig.pdf
 .DEBUG = interactive(); if (.DEBUG) rm(list = ls())
 
 #
@@ -9,7 +8,8 @@ source("cpb-plot-init-functions.r")
 source("cpb-plot-styles.r")
 source("cpb-plot-helper-functions.r")
 
-if (.DEBUG) csvdata = read.csv("data/C17_233_bedr_inves_ex_wo.txt", sep = "\t", header = F, as.is = T) # C17_211_fig_wrldhndel.txt
+#if (.DEBUG) csvdata = read.csv("data/C17_211_fig_wrldhndel.txt", sep = "\t", header = F, as.is = T) # C17_211_fig_wrldhndel.txt # C17_233_bedr_inves_ex_wo
+if (.DEBUG) csvdata = read.csv("data/15mrt/C17_357_kader-terugblik.txt", sep = "\t", header = F, as.is = T) # C17_211_fig_wrldhndel.txt # C17_233_bedr_inves_ex_wo
 
 
 #
