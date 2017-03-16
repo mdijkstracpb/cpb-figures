@@ -3,14 +3,20 @@
 #
 ## Parse command line arguments
 #
-if (.DEBUG) arg = NULL else source('cpb-plot-parse-arguments.r')
 source("cpb-plot-init-functions.r")
 source("cpb-plot-styles.r")
 source("cpb-plot-helper-functions.r")
 
-#if (.DEBUG) csvdata = read.csv("data/C17_211_fig_wrldhndel.txt", sep = "\t", header = F, as.is = T) # C17_211_fig_wrldhndel.txt # C17_233_bedr_inves_ex_wo
-if (.DEBUG) csvdata = read.csv("data/15mrt/C17_357_kader-terugblik.txt", sep = "\t", header = F, as.is = T) # C17_211_fig_wrldhndel.txt # C17_233_bedr_inves_ex_wo
-
+if (.DEBUG)
+{
+	# csvdata = read.csv("data/C17_211_fig_wrldhndel.txt", sep = "\t", header = F, as.is = T) # C17_211_fig_wrldhndel.txt # C17_233_bedr_inves_ex_wo
+	csvdata = read.csv("data/15mrt/C17_357_kader-terugblik.txt", sep = "\t", header = F, as.is = T) # C17_211_fig_wrldhndel.txt # C17_233_bedr_inves_ex_wo
+	arg = NULL
+	arg$type = PLOT.TYPE.LINE
+	arg$future = 2010
+} else {
+	source('cpb-plot-parse-arguments.r')
+}
 
 #
 ## Pre-process csvdata and store in matrix
@@ -29,13 +35,9 @@ x_show      = if (any(is.na(x))) x[which(!is.na(x))] else NULL # if x_show == NU
 x           = fill_x(x)
 x.range		= range(x)
 
-# if (PLOT.TYPE.LINE == arg$type)
-# {
-#
-# }
 
 #
-## Make plot
+## Open device
 #
 if (.DEBUG)
 {
@@ -47,24 +49,31 @@ if (.DEBUG)
 
 par(mai = pdf_mai)
 
-# Set bg
+# Set bg + future
 plot(0, 0, axes = F, xlim = x.range, ylim = y.range, xlab = "", ylab = "", t = "n", bg = "red")
-if (.DEBUG)
+rect(arg$future, y.range[1], x.range[2], y.range[2], density = 20, col = future_col, border = NA)
+par(new = T)
+
+# horizontal line at zero
+abline(h = 0, lty = 2, col = line_zero_col, lwd = line_zero_lwd)
+
+if (PLOT.TYPE.LINE == arg$type)
 {
-	rect(2015, y.range[1], x.range[2], y.range[2], density = 20, col = future_col, border = NA)
-} else if (!is.null(arg$future))
-{
-	rect(arg$future, y.range[1], x.range[2], y.range[2], density = 20, col = future_col, border = NA)
+	curves = list()
+	for (i in 1:nc)
+	{
+		plot(x, y[, i], axes = F, xlim = x.range, ylim = y.range, xlab = "", ylab = "", t = "l", lwd = line_lwd, col = cols$fg[i])
+		curves[[1 + length(curves)]] = list(x = x, y = y[, i])
+		par(new = i < nc)
+	}
 }
 
-abline(h = 0, lty = 2, col = line_zero_col, lwd = line_zero_lwd)
-par(new = T)
-curves = list()
-for (i in 1:nc)
+if (PLOT.TYPE.BARV == arg$type)
 {
-	plot(x, y[, i], axes = F, xlim = x.range, ylim = y.range, xlab = "", ylab = "", t = "l", lwd = line_lwd, col = cols$fg[i])
-	curves[[1 + length(curves)]] = list(x = x, y = y[, i])
-	par(new = i < nc)
+	for (i in 1:nc)
+	{
+		
+	}
 }
 
 # Make axes
@@ -79,4 +88,4 @@ mtext(arg$y2lab,side=4,line=3)
 
 # add labels
 #Hmisc::labcurve(curves, labels = colnames(y), col = cols$fg.txt, adj = 0, cex = 1.1, method = "arrow", arrow.factor = 2)
-Hmisc::labcurve(curves, labels = colnames(y), col = cols$fg.txt, cex = 1.1)
+if (PLOT.TYPE.LINE == arg$type) Hmisc::labcurve(curves, labels = colnames(y), col = cols$fg.txt, cex = 1.1)
