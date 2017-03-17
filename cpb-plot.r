@@ -12,12 +12,12 @@ if (.DEBUG)
 	# csvdata = read.csv("data/C17_211_fig_wrldhndel.txt", sep = "\t", header = F, as.is = T) # C17_211_fig_wrldhndel.txt # C17_233_bedr_inves_ex_wo
 	csvdata = read.csv("data/15mrt/C17_357_kader-terugblik.txt", sep = "\t", header = F, as.is = T) # C17_211_fig_wrldhndel.txt # C17_233_bedr_inves_ex_wo
 	arg = NULL
-	arg$type = PLOT.TYPE.BARV#PLOT.TYPE.BARV#PLOT.TYPE.BARV #PLOT.TYPE.LINE
+	arg$type = PLOT.TYPE.LINE#PLOT.TYPE.BARV#PLOT.TYPE.BARV #PLOT.TYPE.LINE
 	arg$future = 2016
 	arg$xlab  = "Example x"
 	arg$y1lab = "Example y1"
 #	arg$y2lab = "Example y2"
-	arg$output = "output/C17_357_kader-terugblik_BARV.pdf"
+	arg$output = "output/C17_357_kader-terugblik_BARH.pdf"
 } else {
 	source('cpb-plot-parse-arguments.r')
 }
@@ -43,7 +43,7 @@ x.range		= range(x)
 #
 ## Open device
 #
-.DEBUG = F
+#.DEBUG = F
 if (.DEBUG)
 {
 	while (1 != dev.cur()) dev.off() # close all plot windows
@@ -68,7 +68,7 @@ if (PLOT.TYPE.LINE == arg$type)
 	curves = list()
 	for (i in 1:nc)
 	{
-		plot(x, y[, i], axes = F, xlim = x.range, ylim = y.range, xlab = "", ylab = "", t = "l", lwd = line_lwd, col = cols$fg[i])
+		plot(x, y[, i], axes = F, xlim = x.range, ylim = y.range, xlab = "", ylab = "", t = "b", lwd = line_lwd, col = cols$fg[i])
 		curves[[1 + length(curves)]] = list(x = x, y = y[, i])
 		par(new = i < nc)
 	}
@@ -102,13 +102,18 @@ if (PLOT.TYPE.BARV == arg$type)
 	#if (!is.null(arg$future)) rect(rect_future_x0, y.range[1], rect_future_x1, y.range[2], density = 20, col = future_col, border = NA)
 	
 	#par(new = T)
-	barplot(NA,   xlim = x.range, ylim = y.range, beside = TRUE, col = cols$fg[1:ncol(y)], legend = rownames(colnames(y)), axes = F)
+	barplot(NA,   xlim = x.range, ylim = y.range, beside = TRUE, axes = F)
 	if (!is.null(arg$future)) rect(rect_future_x0, y.range[1], rect_future_x1, y.range[2], density = 20, col = future_col, border = NA)
 	barplot(t(y), xlim = x.range, ylim = y.range, beside = TRUE, col = cols$fg[1:ncol(y)], legend = rownames(colnames(y)), axes = F, add = T, legend.text = colnames(y), args.legend = list(x = "bottomright", bg="transparent", bty = "n"))
 
-	axis(2, tick = F, las = 2)
+	#axis(2, tick = F, las = 2)
 }
 
+if (PLOT.TYPE.BARH == arg$type)
+{
+	barplot(t(y), beside= T, horiz = T, axes = F, las = 2, col = cols$fg[1:ncol(y)])
+	axis(1)
+}
 
 #
 ## Show labels
